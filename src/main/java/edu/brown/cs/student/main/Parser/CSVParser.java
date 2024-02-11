@@ -85,7 +85,7 @@ public class CSVParser<T> implements AutoCloseable {
    *
    * @return: a list of generic type holding the parsed output.
    */
-  public Iterable<T> getFinalList() {
+  public List<T> getFinalList() {
     return this.finalList;
   }
 

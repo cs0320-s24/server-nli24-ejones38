@@ -37,7 +37,7 @@ public class CSVSearch {
 
   /** Search method given only 2 arguments of user input: FileName and SearchValue. */
   public void search() {
-    Iterable<List<String>> file = this.parser.getFinalList();
+    List<List<String>> file = this.parser.getFinalList();
     for (int i = 0; i < file.size(); i++) {
       if (file.get(i)
           .contains(
