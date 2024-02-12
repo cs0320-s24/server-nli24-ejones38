@@ -3,6 +3,7 @@ import static spark.Spark.after;
 
 import edu.brown.cs.student.main.Handler.loadHandler;
 import edu.brown.cs.student.main.Handler.searchHandler;
+import edu.brown.cs.student.main.Handler.viewHandler;
 import java.io.Reader;
 import java.util.ArrayList;
 import java.util.List;
@@ -30,7 +31,8 @@ public class Server {
           response.header("Access-Control-Allow-Methods", "*");
         });
     Spark.get("loadcsv", new loadHandler(this.state));
-    Spark.get("searchcsv", new searchHandler());
+    Spark.get("viewcsv", new viewHandler(this.state));
+    Spark.get("searchcsv", new searchHandler(this.state));
     Spark.init();
     Spark.awaitInitialization();
 

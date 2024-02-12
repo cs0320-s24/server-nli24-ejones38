@@ -39,17 +39,10 @@ public class CSVSearch {
   public void search() {
     List<List<String>> file = this.parser.getFinalList();
     for (int i = 0; i < file.size(); i++) {
-      if (file.get(i)
-          .contains(
-              this.searchValue)) { // no need to implement equals because don't need to iterate
+      if (file.get(i).contains(this.searchValue)) { // no need to implement equals because don't need to iterate
         // through each row
-        System.out.println(file.get(i));
         this.result.add(file.get(i));
-        this.matched = Boolean.TRUE;
       }
-    }
-    if (this.matched == Boolean.FALSE) {
-      System.out.println("No Matches Found! Sorry!");
     }
   }
 
@@ -57,31 +50,19 @@ public class CSVSearch {
    * Method to search by index, and specifying whether the CSV has headers.
    *
    * @param columnIndex: the column index to search under.
-   * @param hasHeader: Boolean representing whether the column has headers.
    */
-  public void search(int columnIndex, Boolean hasHeader) {
+  public void search(int columnIndex) throws IndexOutOfBoundsException {
     List<List<String>> file = this.parser.getFinalList();
-    if (hasHeader) { // yes Header
-      for (int i = 1; i < file.size(); i++) { // skip Header row
-        if (file.get(i).get(columnIndex).equals(this.searchValue)) {
-          System.out.println(file.get(i));
+    if (columnIndex < 0 || columnIndex >= file.size()) {
+      throw new IndexOutOfBoundsException();
+    }
+    for (int i = 0; i < file.size(); i++) {
+      if (file.get(i).get(columnIndex).equals(this.searchValue)) {
           this.result.add(file.get(i));
-          this.matched = Boolean.TRUE;
-        }
-      }
-    } else {
-      for (int i = 0; i < file.size(); i++) {
-        if (file.get(i).get(columnIndex).equals(this.searchValue)) {
-          System.out.println(file.get(i));
-          this.result.add(file.get(i));
-          this.matched = Boolean.TRUE;
         }
       }
     }
-    if (this.matched == Boolean.FALSE) {
-      System.out.println("No Matches Found! Sorry!");
-    }
-  }
+
 
   /**
    * Method to search by name, this always assumes headers are present because there should be no
@@ -89,23 +70,21 @@ public class CSVSearch {
    *
    * @param columnName: name of Column that the searchValue is under.
    */
-  public void search(String columnName) {
-    int columnIndex = 0;
+  public void search(String columnName) throws IndexOutOfBoundsException {
+    int columnIndex = -1;
     List<List<String>> file = this.parser.getFinalList();
     for (int i = 0; i < file.get(0).size(); i++) {
       if (file.get(0).get(i).equals(columnName)) {
         columnIndex = i; // matching the right column
       }
     }
+    if (columnIndex == -1) {
+      throw new IndexOutOfBoundsException();
+    }
     for (int i = 1; i < file.size(); i++) { // skip header row
       if (file.get(i).get(columnIndex).equals(this.searchValue)) {
-        System.out.println(file.get(i));
         this.result.add(file.get(i));
-        this.matched = Boolean.TRUE;
       }
-    }
-    if (this.matched == Boolean.FALSE) {
-      System.out.println("No Matches Found! Sorry!");
     }
   }
 

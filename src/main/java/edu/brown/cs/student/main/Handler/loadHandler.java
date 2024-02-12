@@ -21,7 +21,7 @@ public class loadHandler implements Route {
   @Override
   public Object handle(Request request, Response response) throws Exception {
     String filePath = request.queryParams("filepath");
-    //type http://localhost:3232/loadcsv?filepath=income_by_race.csv
+    //type http://localhost:3232/loadcsv?filepath=census/income_by_race.csv
     Map<String,Object> responseMap = new HashMap<>();
     responseMap.put("filepath", filePath);
     Moshi moshi = new Moshi.Builder().build();
@@ -29,7 +29,7 @@ public class loadHandler implements Route {
     JsonAdapter<Map<String, Object>> adapter = moshi.adapter(mapStringObject);
     try (FileReader reader = new FileReader("data/" + filePath)) {
       this.state.setFileValidity(Boolean.TRUE);
-      this.state.setReader(reader);
+      this.state.setPath("data/" + filePath);
       responseMap.put("result", "success");
       return adapter.toJson(responseMap);
     }
