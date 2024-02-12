@@ -17,10 +17,11 @@ import spark.Spark;
  * all had the same shared state.
  */
 
+
 public class Server {
-  private Reader state; //dont know if reader object is correct shared state
-  public Server() {
-//    this.state = loadValidity;
+  private CSVWrapper state;
+  public Server(CSVWrapper csv) {
+    this.state = csv;
     int port = 3232;
     Spark.port(port);
     after(
@@ -28,7 +29,7 @@ public class Server {
           response.header("Access-Control-Allow-Origin", "*");
           response.header("Access-Control-Allow-Methods", "*");
         });
-    Spark.get("loadcsv", new loadHandler());
+    Spark.get("loadcsv", new loadHandler(this.state));
     Spark.get("searchcsv", new searchHandler());
     Spark.init();
     Spark.awaitInitialization();
@@ -38,7 +39,7 @@ public class Server {
   }
 
   public static void main(String[] args) {
-      Server server = new Server();
+      Server server = new Server(new CSVWrapper());
 
     // Sets up data needed for the OrderHandler. You will likely not read from local
     // JSON in this sprint.
