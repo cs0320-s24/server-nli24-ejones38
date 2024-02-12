@@ -4,10 +4,13 @@ import com.squareup.moshi.JsonAdapter;
 import com.squareup.moshi.Moshi;
 import com.squareup.moshi.Types;
 import edu.brown.cs.student.main.CSVWrapper;
+import edu.brown.cs.student.main.Parser.CSVParser;
+import edu.brown.cs.student.main.Parser.StringCreator;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.lang.reflect.Type;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import spark.Request;
 import spark.Response;
@@ -30,6 +33,9 @@ public class loadHandler implements Route {
     try (FileReader reader = new FileReader("data/" + filePath)) {
       this.state.setFileValidity(Boolean.TRUE);
       this.state.setPath("data/" + filePath);
+      CSVParser<List<String>> parser = new CSVParser(reader,new StringCreator());
+      parser.parse();
+      this.state.setData(parser.getFinalList());
       responseMap.put("result", "success");
       return adapter.toJson(responseMap);
     }

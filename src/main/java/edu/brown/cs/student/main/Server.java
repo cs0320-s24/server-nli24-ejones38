@@ -1,6 +1,7 @@
 package edu.brown.cs.student.main;
 import static spark.Spark.after;
 
+import edu.brown.cs.student.main.Handler.broadbandHandler;
 import edu.brown.cs.student.main.Handler.loadHandler;
 import edu.brown.cs.student.main.Handler.searchHandler;
 import edu.brown.cs.student.main.Handler.viewHandler;
@@ -33,6 +34,7 @@ public class Server {
     Spark.get("loadcsv", new loadHandler(this.state));
     Spark.get("viewcsv", new viewHandler(this.state));
     Spark.get("searchcsv", new searchHandler(this.state));
+    Spark.get("broadband", new broadbandHandler());
     Spark.init();
     Spark.awaitInitialization();
 

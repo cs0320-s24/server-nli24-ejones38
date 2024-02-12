@@ -22,6 +22,8 @@ public class CSVSearch {
   /** List of rows containing all the searched values. This is the ultimate output of search. */
   List<List<String>> result;
 
+  List<List<String>> data;
+
   /**
    * Constructor for Search that takes assigns instance variables to associated parameters and
    * initializes a new arrayList to hold final output.
@@ -29,15 +31,15 @@ public class CSVSearch {
    * @param parser: the parser that holds data to be searched.
    * @param searchValue: the String to be searched.
    */
-  public CSVSearch(CSVParser<List<String>> parser, String searchValue) {
-    this.parser = parser;
+  public CSVSearch(List<List<String>> data, String searchValue) {
+    this.data = data;
     this.searchValue = searchValue;
     this.result = new ArrayList<>();
   }
 
   /** Search method given only 2 arguments of user input: FileName and SearchValue. */
   public void search() {
-    List<List<String>> file = this.parser.getFinalList();
+    List<List<String>> file = this.data;
     for (int i = 0; i < file.size(); i++) {
       if (file.get(i).contains(this.searchValue)) { // no need to implement equals because don't need to iterate
         // through each row
@@ -52,7 +54,7 @@ public class CSVSearch {
    * @param columnIndex: the column index to search under.
    */
   public void search(int columnIndex) throws IndexOutOfBoundsException {
-    List<List<String>> file = this.parser.getFinalList();
+    List<List<String>> file = this.data;
     if (columnIndex < 0 || columnIndex >= file.size()) {
       throw new IndexOutOfBoundsException();
     }
@@ -72,7 +74,7 @@ public class CSVSearch {
    */
   public void search(String columnName) throws IndexOutOfBoundsException {
     int columnIndex = -1;
-    List<List<String>> file = this.parser.getFinalList();
+    List<List<String>> file = this.data;
     for (int i = 0; i < file.get(0).size(); i++) {
       if (file.get(0).get(i).equals(columnName)) {
         columnIndex = i; // matching the right column

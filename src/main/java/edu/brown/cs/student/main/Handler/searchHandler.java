@@ -25,25 +25,28 @@ public class searchHandler implements Route {
   public Object handle(Request request, Response response) throws Exception {
     Map<String,Object> responseMap = new HashMap<>();
     Moshi moshi = new Moshi.Builder().build();
+    Type mapStringObject = Types.newParameterizedType(Map.class, String.class, Object.class);
+    JsonAdapter<Map<String, Object>> adapter = moshi.adapter(mapStringObject);
     if (!this.state.checkValidity()){
-      Type mapStringObject = Types.newParameterizedType(Map.class, String.class, Object.class);
-      JsonAdapter<Map<String, Object>> adapter = moshi.adapter(mapStringObject);
       this.state.setFileValidity(Boolean.FALSE);
       responseMap.put("result", "error");
       responseMap.put("error_type", "datasource");
-      responseMap.put("details", "File Not Found!");
+      responseMap.put("details", "No file loaded!");
       return adapter.toJson(responseMap);
     }
-    FileReader reader = new FileReader(this.state.getPath());
-    CSVParser<List<String>> parser = new CSVParser(reader,new StringCreator());
-    parser.parse();
     String value = request.queryParams("value");
     if (value != null) {
       responseMap.put("value", value);
+    } else {
+      responseMap.put("result", "error");
+      responseMap.put("error_type", "error_bad_request");
+      responseMap.put("details", "No value inputted!");
+      return adapter.toJson(responseMap);
     }
-    CSVSearch searcher = new CSVSearch(parser,value);
+    CSVSearch searcher = new CSVSearch(this.state.getData(),value);
     String columnName = request.queryParams("columnName");
     String columnIndex = request.queryParams("columnIndex");
+
     try {
       if (columnName != null) {
         responseMap.put("columnName", columnName);
@@ -57,15 +60,12 @@ public class searchHandler implements Route {
       }
 
     } catch (IndexOutOfBoundsException e) {
-      Type mapStringObject = Types.newParameterizedType(Map.class, String.class, Object.class);
-      JsonAdapter<Map<String, Object>> adapter = moshi.adapter(mapStringObject);
       responseMap.put("result", "error");
       responseMap.put("error_type", "error_bad_request");
-      responseMap.put("details", "Index Out of Bounds!");
+      responseMap.put("details", "Index/Column does not exist!");
       return adapter.toJson(responseMap);
     }
-    Type mapStringObject = Types.newParameterizedType(Map.class, String.class, Object.class);
-    JsonAdapter<Map<String, Object>> adapter = moshi.adapter(mapStringObject);
+
     responseMap.put("result", "success");
     responseMap.put("data",searcher.getResult());
     return adapter.toJson(responseMap);

@@ -33,13 +33,10 @@ public class viewHandler implements Route {
       this.state.setFileValidity(Boolean.FALSE);
       responseMap.put("result", "error");
       responseMap.put("error_type", "datasource");
-      responseMap.put("details", "File Not Found!");
+      responseMap.put("details", "No File Loaded!");
       return adapter.toJson(responseMap);
     }
-    FileReader reader = new FileReader(this.state.getPath());
-    CSVParser<List<String>> parser = new CSVParser(reader,new StringCreator());
-    parser.parse();
-    responseMap.put("data", parser.getFinalList());
+    responseMap.put("data", this.state.getData());
     responseMap.put("result", "success");
     Type mapStringObject = Types.newParameterizedType(Map.class, String.class, Object.class);
     JsonAdapter<Map<String, Object>> adapter = moshi.adapter(mapStringObject);
