@@ -1,4 +1,4 @@
-package edu.brown.cs.student.main;
+package edu.brown.cs.student.main.CensusAPI;
 
 public class County {
   private String NAME;
