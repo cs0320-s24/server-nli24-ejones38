@@ -2,10 +2,10 @@ package edu.brown.cs.student.main;
 
 public class County {
   private String NAME;
-  private int state;
-  private int county;
+  private String state;
+  private String county;
 
-  public County(String NAME, int state, int county) {
+  public County(String NAME, String state, String county) {
     this.NAME = NAME;
     this.state = state;
     this.county = county;
@@ -15,7 +15,7 @@ public class County {
     return this.NAME;
   }
 
-  public int getCode() {
+  public String getCode() {
     return this.county;
   }
 
