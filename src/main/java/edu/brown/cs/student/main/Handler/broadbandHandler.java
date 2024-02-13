@@ -26,6 +26,7 @@ public class broadbandHandler implements Route {
 
   @Override
   public Object handle(Request request, Response response) throws Exception {
+    //broadband?state=California&county=Inyo County
     String state = request.queryParams("state");
     String county = request.queryParams("county");
     Map<String,Object> responseMap = new HashMap<>();
@@ -62,7 +63,9 @@ public class broadbandHandler implements Route {
       }
 
       String countyCodesJson = this.sendCountyCodeRequest(stateCode);
+      System.out.println(countyCodesJson);
       List<County> countyList = CensusAPIUtilities.deserializeCountyCodes(countyCodesJson);
+      System.out.println(countyList);
       for (County county1: countyList) {
         if (county1.getNAME().contains(county)) {
           countyCode = county1.getCode();
@@ -75,7 +78,9 @@ public class broadbandHandler implements Route {
         return adapter.toJson(responseMap);
       }
       String broadBandJson = this.sendBroadbandRequest(stateCode, countyCode);
+      System.out.println(broadBandJson);
       List<List<String>> broadBandData = CensusAPIUtilities.deserializeBroadband(broadBandJson);
+      System.out.println(broadBandData);
 
       responseMap.put("data", broadBandData);
       responseMap.put("result","success");
