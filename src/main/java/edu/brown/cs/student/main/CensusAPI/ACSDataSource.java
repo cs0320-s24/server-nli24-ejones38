@@ -4,16 +4,22 @@ import com.google.common.cache.CacheBuilder;
 import edu.brown.cs.student.main.EvictionPolicy;
 import java.io.IOException;
 import java.time.Duration;
+import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutionException;
+import org.eclipse.jetty.util.IO;
 
 
 public class ACSDataSource {
-    private Cache<String, Object> cache;
+
+    private Cache<String, Map> cache;
+    private Map<String, State> stateMap;
 
 
     public ACSDataSource(long limit, EvictionPolicy policy) {
+        this.stateMap = new HashMap<>();
         switch (policy) {
             case SIZE:
                 CacheBuilder<Object, Object> sizeBuilder = CacheBuilder.newBuilder()
@@ -27,7 +33,9 @@ public class ACSDataSource {
                 break;
         }
     }
+
     public ACSDataSource(EvictionPolicy policy) {
+        this.stateMap = new HashMap<>();
         switch (policy) {
             case REFERENCE:
                 CacheBuilder<Object, Object> referenceBuilder = CacheBuilder.newBuilder()
@@ -43,28 +51,40 @@ public class ACSDataSource {
 
     }
 
-    public Map<String,State> populateStateCache(String key) throws IOException, ExecutionException {
-        Callable<Map<String,State>> valueLoader = () -> {
-            Map<String,State> stateMap = CensusAPIUtilities.deserializeStateCodes();
-            this.cache.put(key,stateMap);
-           return stateMap;
-        };
-        Map<String,State> stateMap = this.getOrLoadValue(key,valueLoader);
-        return stateMap;
-    }
-    public Map<String,County> populateCountyCache(String stateCode) throws ExecutionException{
-        Callable<Map<String,County>> valueLoader = () -> {
-            Map<String,County> countyMap = CensusAPIUtilities.deserializeCountyCodes(stateCode);
-            this.cache.put(stateCode,countyMap);
-            return countyMap;
-        };
-        Map<String,County> countyMap = this.getOrLoadValue(stateCode,valueLoader);
-        return countyMap;
+    public Map<String, State> getStates() throws IOException {
+        if (this.stateMap.isEmpty()) {
+            this.stateMap = CensusAPIUtilities.deserializeStateCodes();
+        }
+        return this.stateMap;
     }
 
-    private <V> V getOrLoadValue(String key, Callable<V> valueLoader) throws ExecutionException {
-        return (V) this.cache.get(key,valueLoader);
+
+    public Map getCountyCache(String stateCode) throws IOException {
+        Map<String,County> countyMap;
+        if (this.cache.getIfPresent(stateCode) == null) {
+            countyMap = CensusAPIUtilities.deserializeCountyCodes(stateCode);
+            this.cache.put(stateCode, countyMap);
+            return this.cache.asMap().get(stateCode);
+        }
+        return this.cache.asMap().get(stateCode);
     }
+
+    public List<List<String>> getBroadbandData(String stateCode, String countyCode) throws IOException {
+        List<List<String>> broadBandData;
+        Map<String, List<List<String>>> broadBandMap = new HashMap<>();
+        if (this.cache.getIfPresent(stateCode + countyCode) == null) {
+            broadBandData = CensusAPIUtilities.deserializeBroadband(stateCode,countyCode);
+            broadBandMap.put(stateCode+countyCode,broadBandData);
+            this.cache.put(stateCode+countyCode, broadBandMap);
+            return broadBandData;
+        }
+        broadBandMap = this.cache.asMap().get(stateCode+countyCode);
+        broadBandData = broadBandMap.get(stateCode+countyCode);
+        return broadBandData;
+    }
+
+
+
 
 
 

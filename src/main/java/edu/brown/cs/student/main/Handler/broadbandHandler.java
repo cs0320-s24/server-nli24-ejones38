@@ -48,8 +48,12 @@ public class broadbandHandler implements Route {
       DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
       String dateTime = LocalDateTime.now().format(formatter);
       responseMap.put("date and time", dateTime);
-      Map<String, State> stateMap = this.cache.populateStateCache("stateMap");
-//      Map<String, State> stateMap = CensusAPIUtilities.deserializeStateCodes();
+      Map<String,State> stateMap;
+     if (this.cache!=null) {
+       stateMap = this.cache.getStates();
+     } else {
+       stateMap = CensusAPIUtilities.deserializeStateCodes();
+     }
       String stateCode = "-1"; //need to do exception catching
       String countyCode = "-1";
       if (stateMap.get(state) != null) {
@@ -62,10 +66,12 @@ public class broadbandHandler implements Route {
         responseMap.put("details", "State does not exist");
         return adapter.toJson(responseMap);
       }
-
-
-      Map<String, County> countyMap = this.cache.populateCountyCache(stateCode);
-//      Map<String, County> countyMap = CensusAPIUtilities.deserializeCountyCodes(stateCode);
+      Map<String, County> countyMap;
+      if (this.cache!=null) {
+        countyMap = this.cache.getCountyCache(stateCode);
+      } else {
+        countyMap = CensusAPIUtilities.deserializeCountyCodes(stateCode);
+      }
       String fullCounty = county + ", " + state;
 
       if (countyMap.get(fullCounty) != null) {
@@ -78,9 +84,13 @@ public class broadbandHandler implements Route {
         return adapter.toJson(responseMap);
       }
 
-      List<List<String>> broadBandData = CensusAPIUtilities.deserializeBroadband(stateCode, countyCode);
-      // no need to cache this data because only would be used again for repeat search of exact same parameters,
-//    // not costly to implement.
+      List<List<String>> broadBandData;
+      if (this.cache!=null) {
+        broadBandData = this.cache.getBroadbandData(stateCode,countyCode);
+      } else {
+        broadBandData = CensusAPIUtilities.deserializeBroadband(stateCode, countyCode);
+      }
+
       responseMap.put("data", broadBandData);
       responseMap.put("result","success");
       return adapter.toJson(responseMap);
