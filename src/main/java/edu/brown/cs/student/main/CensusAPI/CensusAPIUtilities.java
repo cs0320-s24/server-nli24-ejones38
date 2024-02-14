@@ -71,7 +71,7 @@ public class CensusAPIUtilities {
     Moshi moshi = new Moshi.Builder().build();
     Type listType = Types.newParameterizedType(List.class, List.class);
     JsonAdapter<List<List<String>>> adapter = moshi.adapter(listType);
-
+    System.out.println("i have inserted it");
     BufferedSource source = Okio.buffer(Okio.source(clientConnection.getInputStream()));
     List<List<String>> countyData = adapter.fromJson(source);
     clientConnection.disconnect();
