@@ -32,6 +32,8 @@ public class CensusAPIUtilities {
 
     List<List<String>> statesData = adapter.fromJson(new Buffer().readFrom(clientConnection.getInputStream()));
     clientConnection.disconnect();
+
+
     for (int i = 1; i < statesData.size(); i++) {
       List<String> row = statesData.get(i);
       State state = new State(row.get(0), row.get(1));

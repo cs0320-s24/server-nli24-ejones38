@@ -3,7 +3,8 @@ package edu.brown.cs.student.main.Handler;
 import com.squareup.moshi.JsonAdapter;
 import com.squareup.moshi.Moshi;
 import com.squareup.moshi.Types;
-import edu.brown.cs.student.main.CensusAPI.ACSDataSource;
+import edu.brown.cs.student.main.Cache.ACSDataSource;
+import edu.brown.cs.student.main.Cache.Datasource;
 import edu.brown.cs.student.main.CensusAPI.CensusAPIUtilities;
 import edu.brown.cs.student.main.CensusAPI.County;
 import edu.brown.cs.student.main.CensusAPI.State;
@@ -19,8 +20,8 @@ import spark.Response;
 import spark.Route;
 
 public class broadbandHandler implements Route {
-  private ACSDataSource cache;
-  public broadbandHandler(ACSDataSource cache) {
+  private Datasource cache;
+  public broadbandHandler(Datasource cache) {
     this.cache = cache;
 
   }
@@ -28,7 +29,7 @@ public class broadbandHandler implements Route {
 
   }
   @Override
-  public Object handle(Request request, Response response) throws Exception {
+  public Object handle(Request request, Response response) {
     String state = request.queryParams("state");
     String county = request.queryParams("county");
     Map<String,Object> responseMap = new HashMap<>();

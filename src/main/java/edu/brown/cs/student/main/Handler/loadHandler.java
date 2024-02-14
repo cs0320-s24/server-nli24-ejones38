@@ -3,7 +3,7 @@ package edu.brown.cs.student.main.Handler;
 import com.squareup.moshi.JsonAdapter;
 import com.squareup.moshi.Moshi;
 import com.squareup.moshi.Types;
-import edu.brown.cs.student.main.CSVWrapper;
+import edu.brown.cs.student.main.Search.CSVWrapper;
 import edu.brown.cs.student.main.Parser.CSVParser;
 import edu.brown.cs.student.main.Parser.StringCreator;
 import java.io.FileNotFoundException;

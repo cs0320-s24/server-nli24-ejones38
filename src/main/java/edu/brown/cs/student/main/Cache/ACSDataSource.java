@@ -1,24 +1,24 @@
-package edu.brown.cs.student.main.CensusAPI;
+package edu.brown.cs.student.main.Cache;
 import com.google.common.cache.Cache;
 import com.google.common.cache.CacheBuilder;
-import edu.brown.cs.student.main.EvictionPolicy;
+import edu.brown.cs.student.main.Cache.EvictionPolicy;
+import edu.brown.cs.student.main.CensusAPI.CensusAPIUtilities;
+import edu.brown.cs.student.main.CensusAPI.County;
+import edu.brown.cs.student.main.CensusAPI.State;
 import java.io.IOException;
 import java.time.Duration;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.concurrent.Callable;
-import java.util.concurrent.ExecutionException;
-import org.eclipse.jetty.util.IO;
 
 
-public class ACSDataSource {
+public class ACSDataSource implements Datasource {
 
     private Cache<String, Map> cache;
     private Map<String, State> stateMap;
 
 
-    public ACSDataSource(long limit, EvictionPolicy policy) {
+    public ACSDataSource (long limit, EvictionPolicy policy) {
         this.stateMap = new HashMap<>();
         switch (policy) {
             case SIZE:
@@ -50,7 +50,7 @@ public class ACSDataSource {
         }
 
     }
-
+    @Override
     public Map<String, State> getStates() throws IOException {
         if (this.stateMap.isEmpty()) {
             this.stateMap = CensusAPIUtilities.deserializeStateCodes();
@@ -58,9 +58,9 @@ public class ACSDataSource {
         return this.stateMap;
     }
 
-
+    @Override
     public Map getCountyCache(String stateCode) throws IOException {
-        Map<String,County> countyMap;
+        Map<String, County> countyMap;
         if (this.cache.getIfPresent(stateCode) == null) {
             countyMap = CensusAPIUtilities.deserializeCountyCodes(stateCode);
             this.cache.put(stateCode, countyMap);

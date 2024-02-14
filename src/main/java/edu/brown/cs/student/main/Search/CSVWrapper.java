@@ -1,4 +1,4 @@
-package edu.brown.cs.student.main;
+package edu.brown.cs.student.main.Search;
 
 import java.io.FileReader;
 import java.io.Reader;
