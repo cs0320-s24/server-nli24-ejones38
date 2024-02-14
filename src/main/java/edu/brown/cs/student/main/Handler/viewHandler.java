@@ -24,7 +24,7 @@ public class viewHandler implements Route {
   }
 
   @Override
-  public Object handle(Request request, Response response) throws Exception {
+  public Object handle(Request request, Response response) {
     Map<String,Object> responseMap = new HashMap<>();
     Moshi moshi = new Moshi.Builder().build();
     if (!this.state.checkValidity()){

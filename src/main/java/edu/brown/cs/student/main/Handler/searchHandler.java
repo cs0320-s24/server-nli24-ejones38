@@ -22,7 +22,7 @@ public class searchHandler implements Route {
     this.state = state;
   }
   @Override
-  public Object handle(Request request, Response response) throws Exception {
+  public Object handle(Request request, Response response) {
     Map<String,Object> responseMap = new HashMap<>();
     Moshi moshi = new Moshi.Builder().build();
     Type mapStringObject = Types.newParameterizedType(Map.class, String.class, Object.class);

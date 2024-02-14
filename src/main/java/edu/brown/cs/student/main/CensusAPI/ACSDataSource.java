@@ -16,16 +16,31 @@ public class ACSDataSource {
     public ACSDataSource(long limit, EvictionPolicy policy) {
         switch (policy) {
             case SIZE:
-                CacheBuilder<Object, Object> cacheBuilder = CacheBuilder.newBuilder()
+                CacheBuilder<Object, Object> sizeBuilder = CacheBuilder.newBuilder()
                     .maximumSize(limit);
-                this.cache = cacheBuilder.build();
+                this.cache = sizeBuilder.build();
                 break;
             case TIME:
-                CacheBuilder<Object, Object> cacheBuilder1 = CacheBuilder.newBuilder()
+                CacheBuilder<Object, Object> timeBuilder = CacheBuilder.newBuilder()
                     .expireAfterAccess(Duration.ofMinutes(limit));
-                this.cache = cacheBuilder1.build();
+                this.cache = timeBuilder.build();
                 break;
         }
+    }
+    public ACSDataSource(EvictionPolicy policy) {
+        switch (policy) {
+            case REFERENCE:
+                CacheBuilder<Object, Object> referenceBuilder = CacheBuilder.newBuilder()
+                    .weakKeys().softValues();
+                this.cache = referenceBuilder.build();
+                break;
+            case NONE:
+                CacheBuilder<Object, Object> noneBuilder = CacheBuilder.newBuilder();
+                this.cache = noneBuilder.build();
+                break;
+
+        }
+
     }
 
     public Map<String,State> populateStateCache(String key) throws IOException, ExecutionException {

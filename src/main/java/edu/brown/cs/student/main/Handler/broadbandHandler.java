@@ -1,7 +1,5 @@
 package edu.brown.cs.student.main.Handler;
 
-import static spark.Spark.connect;
-
 import com.squareup.moshi.JsonAdapter;
 import com.squareup.moshi.Moshi;
 import com.squareup.moshi.Types;
@@ -26,6 +24,9 @@ public class broadbandHandler implements Route {
     this.cache = cache;
 
   }
+  public broadbandHandler() {
+
+  }
   @Override
   public Object handle(Request request, Response response) throws Exception {
     String state = request.queryParams("state");
@@ -48,6 +49,7 @@ public class broadbandHandler implements Route {
       String dateTime = LocalDateTime.now().format(formatter);
       responseMap.put("date and time", dateTime);
       Map<String, State> stateMap = this.cache.populateStateCache("stateMap");
+//      Map<String, State> stateMap = CensusAPIUtilities.deserializeStateCodes();
       String stateCode = "-1"; //need to do exception catching
       String countyCode = "-1";
       if (stateMap.get(state) != null) {
@@ -63,6 +65,7 @@ public class broadbandHandler implements Route {
 
 
       Map<String, County> countyMap = this.cache.populateCountyCache(stateCode);
+//      Map<String, County> countyMap = CensusAPIUtilities.deserializeCountyCodes(stateCode);
       String fullCounty = county + ", " + state;
 
       if (countyMap.get(fullCounty) != null) {
@@ -76,7 +79,8 @@ public class broadbandHandler implements Route {
       }
 
       List<List<String>> broadBandData = CensusAPIUtilities.deserializeBroadband(stateCode, countyCode);
-
+      // no need to cache this data because only would be used again for repeat search of exact same parameters,
+//    // not costly to implement.
       responseMap.put("data", broadBandData);
       responseMap.put("result","success");
       return adapter.toJson(responseMap);
