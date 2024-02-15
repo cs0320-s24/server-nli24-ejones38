@@ -9,9 +9,17 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * Class that represents mocked data, primarily for testing use.
+ */
 public class MockedACSDataSource implements Datasource {
 
-  public Map getStates() throws IOException {
+  /**
+   * Method that sets and gets the map of states based on developer input. Here is where developers
+   * should choose what they want their mocked data to look like.
+   * @return the Map of state names as keys pointing to state objects as values.
+   */
+  public Map getStates() {
     State california = new State("California", "06");
     State washington = new State("Washington", "53");
     Map<String, State> stateMap = new HashMap();
@@ -20,8 +28,13 @@ public class MockedACSDataSource implements Datasource {
     return stateMap;
   }
 
-  @Override
-  public Map getCountyCache(String stateCode) throws IOException {
+  /**
+   * Method that sets and gets the counties for the particular state. Mocked data needs to be filled
+   * in here as well.
+   * @param stateCode String state code to associate all counties with.
+   * @return a map of county names as keys and county objects as values.
+   */
+  public Map getCountyCache(String stateCode) {
     County napa = new County("Napa County, California", "06", "055");
     County sd = new County("San Diego County, California", "06", "073");
     Map<String, County> countyMap = new HashMap();
@@ -30,9 +43,14 @@ public class MockedACSDataSource implements Datasource {
     return countyMap;
   }
 
-  @Override
-  public List<List<String>> getBroadbandData(String stateCode, String countyCode)
-      throws IOException {
+
+  /**
+   * Method that sets and gets the broadband data, essentially creating the mocked output.
+   * @param stateCode String state code to search for
+   * @param countyCode String county code to search for
+   * @return the List of rows including the header and broadband data.
+   */
+  public List<List<String>> getBroadbandData(String stateCode, String countyCode) {
     List<List<String>> broadBandList = new ArrayList<>();
     List<String> innerList =
         new ArrayList<>(Arrays.asList("San Diego County, California", "92.9", "06", "073"));

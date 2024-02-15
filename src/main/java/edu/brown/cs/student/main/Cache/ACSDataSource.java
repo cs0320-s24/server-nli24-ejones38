@@ -11,11 +11,27 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * Class that represents the Census Data Source, but connects to the CensusAPI and retrieves the data.
+ */
 public class ACSDataSource implements Datasource {
 
+  /**
+   * Instance variable that represents the cache. The cache stores stateMap, countyMaps, and broadbandMaps.
+   */
   private Cache<String, Map> cache;
+
+  /**
+   * Instance variable that represents the stateMap. This should only be filled once assuming searches
+   * are consistent over time.
+   */
   private Map<String, State> stateMap;
 
+  /**
+   * Constructor for the eviction policies that need a numerical input.
+   * @param limit the numerical input for size and time
+   * @param policy the eviction policy specified
+   */
   public ACSDataSource(long limit, EvictionPolicy policy) {
     this.stateMap = new HashMap<>();
     switch (policy) {
@@ -25,12 +41,16 @@ public class ACSDataSource implements Datasource {
         break;
       case TIME:
         CacheBuilder<Object, Object> timeBuilder =
-            CacheBuilder.newBuilder().expireAfterAccess(Duration.ofMinutes(limit));
+            CacheBuilder.newBuilder().expireAfterAccess(Duration.ofMinutes(limit));//
         this.cache = timeBuilder.build();
         break;
     }
   }
 
+  /**
+   * Constructor for caches where eviction policy is reference based or there is no eviction policy.
+   * @param policy the eviction policy type.
+   */
   public ACSDataSource(EvictionPolicy policy) {
     this.stateMap = new HashMap<>();
     switch (policy) {
@@ -46,6 +66,11 @@ public class ACSDataSource implements Datasource {
     }
   }
 
+  /**
+   * Method that gets the map of states if it exists, and fills it if it doesn't.
+   * @return the map of states.
+   * @throws IOException generic exception for sending requests to censusAPI.
+   */
   @Override
   public Map<String, State> getStates() throws IOException {
     if (this.stateMap.isEmpty()) {
@@ -54,6 +79,14 @@ public class ACSDataSource implements Datasource {
     return this.stateMap;
   }
 
+  /**
+   * Method that gets a map of county if it exists, and puts it in the cache if it doesn't already
+   * exist in the cache. The cache stores this using the state code as a key, and the county map for that
+   * given state as the value.
+   * @param stateCode String state code to associate all counties with.
+   * @return a map of county names as keys and county objects as values for the given state code.
+   * @throws IOException generic java exception for requests to censusAPi.
+   */
   @Override
   public Map getCountyCache(String stateCode) throws IOException {
     Map<String, County> countyMap;
@@ -64,6 +97,15 @@ public class ACSDataSource implements Datasource {
     }
     return this.cache.asMap().get(stateCode);
   }
+
+  /**
+   * Method that gets the broadBand data from the cache if it exists or puts it there and returns it
+   * if it doesn't.
+   * @param stateCode String state code to search for
+   * @param countyCode String county code to search for
+   * @return a list of rows containing the headers and the broadband information.
+   * @throws IOException generic java exception for requests to censusAPI.
+   */
 
   public List<List<String>> getBroadbandData(String stateCode, String countyCode)
       throws IOException {
