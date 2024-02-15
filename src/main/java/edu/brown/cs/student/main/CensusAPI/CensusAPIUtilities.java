@@ -15,12 +15,10 @@ import okio.BufferedSource;
 import okio.Okio;
 
 public class CensusAPIUtilities {
-  private CensusAPIUtilities() {
-
-  }
+  private CensusAPIUtilities() {}
 
   public static Map<String, State> deserializeStateCodes() throws IOException {
-    URL requestURL = new URL("https","api.census.gov","/data/2010/dec/sf1?get=NAME&for=state:*");
+    URL requestURL = new URL("https", "api.census.gov", "/data/2010/dec/sf1?get=NAME&for=state:*");
     HttpURLConnection clientConnection = (HttpURLConnection) requestURL.openConnection();
     clientConnection.setRequestMethod("GET");
     clientConnection.connect();
@@ -30,9 +28,9 @@ public class CensusAPIUtilities {
     Type listType = Types.newParameterizedType(List.class, List.class);
     JsonAdapter<List<List<String>>> adapter = moshi.adapter(listType);
 
-    List<List<String>> statesData = adapter.fromJson(new Buffer().readFrom(clientConnection.getInputStream()));
+    List<List<String>> statesData =
+        adapter.fromJson(new Buffer().readFrom(clientConnection.getInputStream()));
     clientConnection.disconnect();
-
 
     for (int i = 1; i < statesData.size(); i++) {
       List<String> row = statesData.get(i);
@@ -43,7 +41,11 @@ public class CensusAPIUtilities {
   }
 
   public static Map<String, County> deserializeCountyCodes(String stateCode) throws IOException {
-    URL requestURL = new URL("https","api.census.gov","/data/2010/dec/sf1?get=NAME&for=county:*&in=state:" + stateCode);
+    URL requestURL =
+        new URL(
+            "https",
+            "api.census.gov",
+            "/data/2010/dec/sf1?get=NAME&for=county:*&in=state:" + stateCode);
     HttpURLConnection clientConnection = (HttpURLConnection) requestURL.openConnection();
     clientConnection.setRequestMethod("GET");
     clientConnection.connect();
@@ -63,9 +65,16 @@ public class CensusAPIUtilities {
     return countyMap;
   }
 
-  public static List<List<String>> deserializeBroadband(String stateCode, String countyCode) throws IOException {
-    URL requestURL = new URL("https","api.census.gov","/data/2021/acs/acs1/subject/variables?get=NAME,S2802_C03_022E&for=county:"
-        + countyCode + "&in=state:" + stateCode);
+  public static List<List<String>> deserializeBroadband(String stateCode, String countyCode)
+      throws IOException {
+    URL requestURL =
+        new URL(
+            "https",
+            "api.census.gov",
+            "/data/2021/acs/acs1/subject/variables?get=NAME,S2802_C03_022E&for=county:"
+                + countyCode
+                + "&in=state:"
+                + stateCode);
     HttpURLConnection clientConnection = (HttpURLConnection) requestURL.openConnection();
     clientConnection.setRequestMethod("GET");
     clientConnection.connect();
@@ -75,5 +84,4 @@ public class CensusAPIUtilities {
     BufferedSource source = Okio.buffer(Okio.source(clientConnection.getInputStream()));
     return adapter.fromJson(source);
   }
-
 }

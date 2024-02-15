@@ -1,7 +1,5 @@
 package edu.brown.cs.student.main.Search;
 
-import java.io.FileReader;
-import java.io.Reader;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -10,6 +8,7 @@ public class CSVWrapper {
   private String filepath;
 
   private List<List<String>> data;
+
   public CSVWrapper() {
     this.fileValidity = Boolean.FALSE;
   }
@@ -17,10 +16,12 @@ public class CSVWrapper {
   public void setData(List data) {
     this.data = data;
   }
+
   public List<List<String>> getData() {
     List<List<String>> data = new ArrayList<>(this.data);
     return data;
   }
+
   public void setFileValidity(Boolean validity) {
     this.fileValidity = validity;
   }
@@ -28,6 +29,7 @@ public class CSVWrapper {
   public void setPath(String filepath) {
     this.filepath = filepath;
   }
+
   public String getPath() {
     String filepath = this.filepath;
     return filepath;
@@ -37,5 +39,4 @@ public class CSVWrapper {
     Boolean isValid = this.fileValidity;
     return isValid;
   }
-
 }

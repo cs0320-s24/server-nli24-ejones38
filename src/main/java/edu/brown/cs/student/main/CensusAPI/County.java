@@ -18,7 +18,4 @@ public class County {
   public String getCode() {
     return this.county;
   }
-
-
-
 }

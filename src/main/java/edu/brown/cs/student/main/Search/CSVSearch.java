@@ -41,7 +41,9 @@ public class CSVSearch {
   public void search() {
     List<List<String>> file = this.data;
     for (int i = 0; i < file.size(); i++) {
-      if (file.get(i).contains(this.searchValue)) { // no need to implement equals because don't need to iterate
+      if (file.get(i)
+          .contains(
+              this.searchValue)) { // no need to implement equals because don't need to iterate
         // through each row
         this.result.add(file.get(i));
       }
@@ -60,11 +62,10 @@ public class CSVSearch {
     }
     for (int i = 0; i < file.size(); i++) {
       if (file.get(i).get(columnIndex).equals(this.searchValue)) {
-          this.result.add(file.get(i));
-        }
+        this.result.add(file.get(i));
       }
     }
-
+  }
 
   /**
    * Method to search by name, this always assumes headers are present because there should be no

@@ -3,8 +3,8 @@ package edu.brown.cs.student.main.Handler;
 import com.squareup.moshi.JsonAdapter;
 import com.squareup.moshi.Moshi;
 import com.squareup.moshi.Types;
-import edu.brown.cs.student.main.Search.CSVWrapper;
 import edu.brown.cs.student.main.Search.CSVSearch;
+import edu.brown.cs.student.main.Search.CSVWrapper;
 import java.lang.reflect.Type;
 import java.util.HashMap;
 import java.util.Map;
@@ -14,16 +14,18 @@ import spark.Route;
 
 public class searchHandler implements Route {
   private CSVWrapper state;
+
   public searchHandler(CSVWrapper state) {
     this.state = state;
   }
+
   @Override
   public Object handle(Request request, Response response) {
-    Map<String,Object> responseMap = new HashMap<>();
+    Map<String, Object> responseMap = new HashMap<>();
     Moshi moshi = new Moshi.Builder().build();
     Type mapStringObject = Types.newParameterizedType(Map.class, String.class, Object.class);
     JsonAdapter<Map<String, Object>> adapter = moshi.adapter(mapStringObject);
-    if (!this.state.checkValidity()){
+    if (!this.state.checkValidity()) {
       this.state.setFileValidity(Boolean.FALSE);
       responseMap.put("result", "error");
       responseMap.put("error_type", "datasource");
@@ -39,7 +41,7 @@ public class searchHandler implements Route {
       responseMap.put("details", "No value inputted!");
       return adapter.toJson(responseMap);
     }
-    CSVSearch searcher = new CSVSearch(this.state.getData(),value);
+    CSVSearch searcher = new CSVSearch(this.state.getData(), value);
     String columnName = request.queryParams("columnName");
     String columnIndex = request.queryParams("columnIndex");
 
@@ -63,8 +65,7 @@ public class searchHandler implements Route {
     }
 
     responseMap.put("result", "success");
-    responseMap.put("data",searcher.getResult());
+    responseMap.put("data", searcher.getResult());
     return adapter.toJson(responseMap);
-
   }
 }

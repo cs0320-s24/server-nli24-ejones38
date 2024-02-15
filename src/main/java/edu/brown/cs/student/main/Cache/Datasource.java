@@ -7,9 +7,8 @@ import java.util.Map;
 public interface Datasource {
 
   Map getStates() throws IOException;
+
   Map getCountyCache(String stateCode) throws IOException;
 
   List<List<String>> getBroadbandData(String stateCode, String countyCode) throws IOException;
-
-
 }

@@ -3,7 +3,6 @@ package edu.brown.cs.student.main.Handler;
 import com.squareup.moshi.JsonAdapter;
 import com.squareup.moshi.Moshi;
 import com.squareup.moshi.Types;
-import edu.brown.cs.student.main.Cache.ACSDataSource;
 import edu.brown.cs.student.main.Cache.Datasource;
 import edu.brown.cs.student.main.CensusAPI.CensusAPIUtilities;
 import edu.brown.cs.student.main.CensusAPI.County;
@@ -21,18 +20,18 @@ import spark.Route;
 
 public class broadbandHandler implements Route {
   private Datasource cache;
+
   public broadbandHandler(Datasource cache) {
     this.cache = cache;
-
   }
-  public broadbandHandler() {
 
-  }
+  public broadbandHandler() {}
+
   @Override
   public Object handle(Request request, Response response) {
     String state = request.queryParams("state");
     String county = request.queryParams("county");
-    Map<String,Object> responseMap = new HashMap<>();
+    Map<String, Object> responseMap = new HashMap<>();
     Moshi moshi = new Moshi.Builder().build();
     Type mapStringObject = Types.newParameterizedType(Map.class, String.class, Object.class);
     JsonAdapter<Map<String, Object>> adapter = moshi.adapter(mapStringObject);
@@ -49,26 +48,25 @@ public class broadbandHandler implements Route {
       DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
       String dateTime = LocalDateTime.now().format(formatter);
       responseMap.put("date and time", dateTime);
-      Map<String,State> stateMap;
-     if (this.cache!=null) {
-       stateMap = this.cache.getStates();
-     } else {
-       stateMap = CensusAPIUtilities.deserializeStateCodes();
-     }
-      String stateCode = "-1"; //need to do exception catching
+      Map<String, State> stateMap;
+      if (this.cache != null) {
+        stateMap = this.cache.getStates();
+      } else {
+        stateMap = CensusAPIUtilities.deserializeStateCodes();
+      }
+      String stateCode = "-1"; // need to do exception catching
       String countyCode = "-1";
       if (stateMap.get(state) != null) {
         State state1 = stateMap.get(state);
         stateCode = state1.getCode();
-      }
-      else {
+      } else {
         responseMap.put("result", "error");
         responseMap.put("error_type", "error_bad_request");
         responseMap.put("details", "State does not exist");
         return adapter.toJson(responseMap);
       }
       Map<String, County> countyMap;
-      if (this.cache!=null) {
+      if (this.cache != null) {
         countyMap = this.cache.getCountyCache(stateCode);
       } else {
         countyMap = CensusAPIUtilities.deserializeCountyCodes(stateCode);
@@ -86,14 +84,14 @@ public class broadbandHandler implements Route {
       }
 
       List<List<String>> broadBandData;
-      if (this.cache!=null) {
-        broadBandData = this.cache.getBroadbandData(stateCode,countyCode);
+      if (this.cache != null) {
+        broadBandData = this.cache.getBroadbandData(stateCode, countyCode);
       } else {
         broadBandData = CensusAPIUtilities.deserializeBroadband(stateCode, countyCode);
       }
 
       responseMap.put("data", broadBandData);
-      responseMap.put("result","success");
+      responseMap.put("result", "success");
       return adapter.toJson(responseMap);
 
     } catch (IOException e) {
@@ -102,7 +100,4 @@ public class broadbandHandler implements Route {
       return adapter.toJson(responseMap);
     }
   }
-
-
-
 }

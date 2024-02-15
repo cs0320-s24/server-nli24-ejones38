@@ -20,9 +20,9 @@ public class viewHandler implements Route {
 
   @Override
   public Object handle(Request request, Response response) {
-    Map<String,Object> responseMap = new HashMap<>();
+    Map<String, Object> responseMap = new HashMap<>();
     Moshi moshi = new Moshi.Builder().build();
-    if (!this.state.checkValidity()){
+    if (!this.state.checkValidity()) {
       Type mapStringObject = Types.newParameterizedType(Map.class, String.class, Object.class);
       JsonAdapter<Map<String, Object>> adapter = moshi.adapter(mapStringObject);
       this.state.setFileValidity(Boolean.FALSE);
@@ -36,8 +36,5 @@ public class viewHandler implements Route {
     Type mapStringObject = Types.newParameterizedType(Map.class, String.class, Object.class);
     JsonAdapter<Map<String, Object>> adapter = moshi.adapter(mapStringObject);
     return adapter.toJson(responseMap);
-
   }
-
-
 }
