@@ -16,18 +16,16 @@ import spark.Request;
 import spark.Response;
 import spark.Route;
 
-/**
- * Class responsible for handling requests to load CSV files
- */
+/** Class responsible for handling requests to load CSV files */
 public class loadHandler implements Route {
 
-  /**
-   * the instance variable representing the shared csv values/data that multiple handlers use
-   */
+  /** the instance variable representing the shared csv values/data that multiple handlers use */
   private CSVWrapper state;
 
   /**
-   * The constructor of loadHandler. Takes in a CSVWrapper which contains useful data about a CSV file to be/is parsed
+   * The constructor of loadHandler. Takes in a CSVWrapper which contains useful data about a CSV
+   * file to be/is parsed
+   *
    * @param state - the wrapper class that holds CSV file data
    */
   public loadHandler(CSVWrapper state) {
@@ -35,9 +33,10 @@ public class loadHandler implements Route {
   }
 
   /**
-   * Method handles incoming loadcsv requests. Uses the requested to filepath in conjunction with CSVParser to parse a
-   * specified CSV and store its data. Also updates data fields in the state variable for other handlers to use before
-   * outputting whether the file was successfully parsed.
+   * Method handles incoming loadcsv requests. Uses the requested to filepath in conjunction with
+   * CSVParser to parse a specified CSV and store its data. Also updates data fields in the state
+   * variable for other handlers to use before outputting whether the file was successfully parsed.
+   *
    * @param request - the incoming user request
    * @param response - the outgoing response back to the user
    * @return - a JSON string representing whether the parser was successful
@@ -69,4 +68,5 @@ public class loadHandler implements Route {
       return adapter.toJson(responseMap);
     }
   }
+
 }

@@ -4,7 +4,6 @@ import com.squareup.moshi.JsonAdapter;
 import com.squareup.moshi.Moshi;
 import com.squareup.moshi.Types;
 import edu.brown.cs.student.main.Cache.ACSDataSource;
-import edu.brown.cs.student.main.Cache.EvictionPolicy;
 import edu.brown.cs.student.main.Handler.broadbandHandler;
 import edu.brown.cs.student.main.Handler.loadHandler;
 import edu.brown.cs.student.main.Handler.searchHandler;
@@ -202,7 +201,7 @@ public class testHandlers {
   }
 
   @Test
-  public void testSuccess() throws IOException {
+  public void testSuccessBroadband() throws IOException {
     HttpURLConnection clientConnection =
         tryRequest("broadband?state=Washington&county=King%20County");
     assertEquals(200, clientConnection.getResponseCode());

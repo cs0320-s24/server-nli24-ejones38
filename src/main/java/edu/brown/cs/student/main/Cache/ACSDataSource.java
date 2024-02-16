@@ -12,23 +12,26 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * Class that represents the Census Data Source, but connects to the CensusAPI and retrieves the data.
+ * Class that represents the Census Data Source, but connects to the CensusAPI and retrieves the
+ * data.
  */
 public class ACSDataSource implements Datasource {
 
   /**
-   * Instance variable that represents the cache. The cache stores stateMap, countyMaps, and broadbandMaps.
+   * Instance variable that represents the cache. The cache stores stateMap, countyMaps, and
+   * broadbandMaps.
    */
   private Cache<String, Map> cache;
 
   /**
-   * Instance variable that represents the stateMap. This should only be filled once assuming searches
-   * are consistent over time.
+   * Instance variable that represents the stateMap. This should only be filled once assuming
+   * searches are consistent over time.
    */
   private Map<String, State> stateMap;
 
   /**
    * Constructor for the eviction policies that need a numerical input.
+   *
    * @param limit the numerical input for size and time
    * @param policy the eviction policy specified
    */
@@ -41,30 +44,28 @@ public class ACSDataSource implements Datasource {
         break;
       case TIME:
         CacheBuilder<Object, Object> timeBuilder =
-            CacheBuilder.newBuilder().expireAfterAccess(Duration.ofMinutes(limit));//
+            CacheBuilder.newBuilder().expireAfterAccess(Duration.ofMinutes(limit)); //
         this.cache = timeBuilder.build();
         break;
       case REFERENCE:
         CacheBuilder<Object, Object> referenceBuilder =
-                CacheBuilder.newBuilder().weakKeys().softValues().maximumSize(limit);
+            CacheBuilder.newBuilder().weakKeys().softValues().maximumSize(limit);
         this.cache = referenceBuilder.build();
         break;
     }
   }
 
-  /**
-   * Constructor for caches where eviction policy is reference based or there is no eviction policy.
-   * @param policy the eviction policy type.
-   */
+  /** Constructor for caches where there is no eviction policy. */
   public ACSDataSource() {
     this.stateMap = new HashMap<>();
 
-        CacheBuilder<Object, Object> noneBuilder = CacheBuilder.newBuilder();
-        this.cache = noneBuilder.build();
+    CacheBuilder<Object, Object> noneBuilder = CacheBuilder.newBuilder();
+    this.cache = noneBuilder.build();
   }
 
   /**
    * Method that gets the map of states if it exists, and fills it if it doesn't.
+   *
    * @return the map of states.
    * @throws IOException generic exception for sending requests to censusAPI.
    */
@@ -78,8 +79,9 @@ public class ACSDataSource implements Datasource {
 
   /**
    * Method that gets a map of county if it exists, and puts it in the cache if it doesn't already
-   * exist in the cache. The cache stores this using the state code as a key, and the county map for that
-   * given state as the value.
+   * exist in the cache. The cache stores this using the state code as a key, and the county map for
+   * that given state as the value.
+   *
    * @param stateCode String state code to associate all counties with.
    * @return a map of county names as keys and county objects as values for the given state code.
    * @throws IOException generic java exception for requests to censusAPi.
@@ -98,12 +100,12 @@ public class ACSDataSource implements Datasource {
   /**
    * Method that gets the broadBand data from the cache if it exists or puts it there and returns it
    * if it doesn't.
+   *
    * @param stateCode String state code to search for
    * @param countyCode String county code to search for
    * @return a list of rows containing the headers and the broadband information.
    * @throws IOException generic java exception for requests to censusAPI.
    */
-
   public List<List<String>> getBroadbandData(String stateCode, String countyCode)
       throws IOException {
     List<List<String>> broadBandData;
@@ -119,20 +121,16 @@ public class ACSDataSource implements Datasource {
     return broadBandData;
   }
 
-  public long getCacheSize(){
-    return  this.cache.size();
-  }
-
-  public Cache<String, Map> getCache(){
+  public Cache<String, Map> getCache() {
     return this.cache;
 
-//    Cache<String, Map> newCache = CacheBuilder.newBuilder().build();
-//
-//    // Copy entries from the original cache to the new cache
-//    for (Map.Entry<String, Map> entry : this.cache.asMap().entrySet()) {
-//      newCache.put(entry.getKey(), entry.getValue());
-//    }
-//
-//    return newCache;
+    //    Cache<String, Map> newCache = CacheBuilder.newBuilder().build();
+    //
+    //    // Copy entries from the original cache to the new cache
+    //    for (Map.Entry<String, Map> entry : this.cache.asMap().entrySet()) {
+    //      newCache.put(entry.getKey(), entry.getValue());
+    //    }
+    //
+    //    return newCache;
   }
-  }
+}

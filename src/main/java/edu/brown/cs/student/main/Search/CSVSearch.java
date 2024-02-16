@@ -9,21 +9,18 @@ import java.util.List;
  */
 public class CSVSearch {
 
-
   /** The value to be searched for. */
   String searchValue;
 
   /** List of rows containing all the searched values. This is the ultimate output of search. */
   List<List<String>> result;
 
-  /**
-   * List of lists/rows that contains the data to be searched through
-   */
+  /** List of lists/rows that contains the data to be searched through */
   List<List<String>> data;
 
   /**
-   * Constructor for Search that assigns instance variables to associated parameters and
-   * initializes a new arrayList to hold final output.
+   * Constructor for Search that assigns instance variables to associated parameters and initializes
+   * a new arrayList to hold final output.
    *
    * @param data: A list of lists/rows that contains the data to be searched through.
    * @param searchValue: the String to be searched.
@@ -95,6 +92,4 @@ public class CSVSearch {
   public List<List<String>> getResult() {
     return this.result;
   }
-
-
 }

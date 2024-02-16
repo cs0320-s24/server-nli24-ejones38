@@ -17,14 +17,13 @@ import spark.Spark;
  */
 public class Server {
 
-  /**
-   * the instance variable representing the shared csv values/data that multiple handlers use
-   */
+  /** the instance variable representing the shared csv values/data that multiple handlers use */
   private CSVWrapper state;
 
   /**
-   * Constructor for the server class. Instantiates the passed in CSVWrapper initializes the server and prepares the
-   * handlers and their needed data.
+   * Constructor for the server class. Instantiates the passed in CSVWrapper initializes the server
+   * and prepares the handlers and their needed data.
+   *
    * @param csv - the wrapper class that holds CSV file data
    */
   public Server(CSVWrapper csv) {
@@ -48,6 +47,7 @@ public class Server {
 
   /**
    * The main method that runs the server
+   *
    * @param args - command line arguments
    */
   public static void main(String[] args) {
