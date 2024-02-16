@@ -46,7 +46,7 @@ public class testHandlers {
     Spark.get("loadcsv", new loadHandler(csvData));
     Spark.get("viewcsv", new viewHandler(csvData));
     Spark.get("searchcsv", new searchHandler(csvData));
-    Spark.get("broadband", new broadbandHandler(new ACSDataSource(EvictionPolicy.NONE)));
+    Spark.get("broadband", new broadbandHandler(new ACSDataSource()));
     Spark.init();
     Spark.awaitInitialization();
   }

@@ -1,11 +1,16 @@
 # Project Details
-
+Sprint 2: Server
+Ethan Jones (ejones38) Nick Li (idk)
+Time Estimate: too long
+https://github.com/cs0320-s24/server-nli24-ejones38.git 
 # Design Choices
 
 # Errors/Bugs
 
-# Tests
 
+# Tests
+Our project has three testing suites: testCensusApiUtilities, testHandlers, and testHandlersMock.
+testCensusApiUtilities tests our API utilities class ability to obtain a JSON 
 # How to
 
 ## Configure Eviction Policy

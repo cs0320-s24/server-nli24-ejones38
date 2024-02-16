@@ -44,6 +44,11 @@ public class ACSDataSource implements Datasource {
             CacheBuilder.newBuilder().expireAfterAccess(Duration.ofMinutes(limit));//
         this.cache = timeBuilder.build();
         break;
+      case REFERENCE:
+        CacheBuilder<Object, Object> referenceBuilder =
+                CacheBuilder.newBuilder().weakKeys().softValues().maximumSize(limit);
+        this.cache = referenceBuilder.build();
+        break;
     }
   }
 
@@ -51,19 +56,11 @@ public class ACSDataSource implements Datasource {
    * Constructor for caches where eviction policy is reference based or there is no eviction policy.
    * @param policy the eviction policy type.
    */
-  public ACSDataSource(EvictionPolicy policy) {
+  public ACSDataSource() {
     this.stateMap = new HashMap<>();
-    switch (policy) {
-      case REFERENCE:
-        CacheBuilder<Object, Object> referenceBuilder =
-            CacheBuilder.newBuilder().weakKeys().softValues();
-        this.cache = referenceBuilder.build();
-        break;
-      case NONE:
+
         CacheBuilder<Object, Object> noneBuilder = CacheBuilder.newBuilder();
         this.cache = noneBuilder.build();
-        break;
-    }
   }
 
   /**
@@ -121,4 +118,21 @@ public class ACSDataSource implements Datasource {
     broadBandData = broadBandMap.get(stateCode + countyCode);
     return broadBandData;
   }
-}
+
+  public long getCacheSize(){
+    return  this.cache.size();
+  }
+
+  public Cache<String, Map> getCache(){
+    return this.cache;
+
+//    Cache<String, Map> newCache = CacheBuilder.newBuilder().build();
+//
+//    // Copy entries from the original cache to the new cache
+//    for (Map.Entry<String, Map> entry : this.cache.asMap().entrySet()) {
+//      newCache.put(entry.getKey(), entry.getValue());
+//    }
+//
+//    return newCache;
+  }
+  }
