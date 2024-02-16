@@ -1,27 +1,32 @@
 package edu.brown.cs.student.main;
+
 import static spark.Spark.after;
 
+import edu.brown.cs.student.main.Cache.ACSDataSource;
+import edu.brown.cs.student.main.Cache.EvictionPolicy;
 import edu.brown.cs.student.main.Handler.broadbandHandler;
 import edu.brown.cs.student.main.Handler.loadHandler;
 import edu.brown.cs.student.main.Handler.searchHandler;
 import edu.brown.cs.student.main.Handler.viewHandler;
-import java.io.Reader;
-import java.util.ArrayList;
-import java.util.List;
+import edu.brown.cs.student.main.Search.CSVWrapper;
 import spark.Spark;
+
 /**
  * Top-level class for this demo. Contains the main() method which starts Spark and runs the various
  * handlers (2).
- *
- * <p>Notice that the OrderHandler takes in a state (menu) that can be shared if we extended the
- * restaurant They need to share state (a menu). This would be a great opportunity to use dependency
- * injection. If we needed more endpoints, more functionality classes, etc. we could make sure they
- * all had the same shared state.
  */
-
-
 public class Server {
+
+  /**
+   * the instance variable representing the shared csv values/data that multiple handlers use
+   */
   private CSVWrapper state;
+
+  /**
+   * Constructor for the server class. Instantiates the passed in CSVWrapper initializes the server and prepares the
+   * handlers and their needed data.
+   * @param csv - the wrapper class that holds CSV file data
+   */
   public Server(CSVWrapper csv) {
     this.state = csv;
     int port = 3232;
@@ -34,33 +39,18 @@ public class Server {
     Spark.get("loadcsv", new loadHandler(this.state));
     Spark.get("viewcsv", new viewHandler(this.state));
     Spark.get("searchcsv", new searchHandler(this.state));
-    Spark.get("broadband", new broadbandHandler());
+    ACSDataSource cache = new ACSDataSource(100000000, EvictionPolicy.SIZE);
+    Spark.get("broadband", new broadbandHandler(cache));
     Spark.init();
     Spark.awaitInitialization();
-
-    // Notice this link alone leads to a 404... Why is that?
     System.out.println("Server started at http://localhost:" + port);
   }
 
+  /**
+   * The main method that runs the server
+   * @param args - command line arguments
+   */
   public static void main(String[] args) {
-      Server server = new Server(new CSVWrapper());
-
-    // Sets up data needed for the OrderHandler. You will likely not read from local
-    // JSON in this sprint.
-//    String menuAsJson = SoupAPIUtilities.readInJson("data/menu.json");
-//    List<Soup> menu = new ArrayList<>();
-//    try {
-//      menu = SoupAPIUtilities.deserializeMenu(menuAsJson);
-//    } catch (Exception e) {
-//      // See note in ActivityHandler about this broad Exception catch... Unsatisfactory, but gets
-//      // the job done in the gearup where it is not the focus.
-//      e.printStackTrace();
-//      System.err.println("Errored while deserializing the menu");
-//    }
-
-    // Setting up the handler for the GET /order and /activity endpoints
-
+    new Server(new CSVWrapper());
   }
-
-
 }

@@ -1,6 +1,5 @@
 package edu.brown.cs.student.main.Search;
 
-import edu.brown.cs.student.main.Parser.CSVParser;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -10,25 +9,23 @@ import java.util.List;
  */
 public class CSVSearch {
 
-  /** CSVParser that parses rows into a row of strings. */
-  CSVParser<List<String>> parser;
 
   /** The value to be searched for. */
   String searchValue;
 
-  /** Boolean to track whether there are any matches for the searched value. */
-  Boolean matched = Boolean.FALSE;
-
   /** List of rows containing all the searched values. This is the ultimate output of search. */
   List<List<String>> result;
 
+  /**
+   * List of lists/rows that contains the data to be searched through
+   */
   List<List<String>> data;
 
   /**
-   * Constructor for Search that takes assigns instance variables to associated parameters and
+   * Constructor for Search that assigns instance variables to associated parameters and
    * initializes a new arrayList to hold final output.
    *
-   * @param parser: the parser that holds data to be searched.
+   * @param data: A list of lists/rows that contains the data to be searched through.
    * @param searchValue: the String to be searched.
    */
   public CSVSearch(List<List<String>> data, String searchValue) {
@@ -41,7 +38,9 @@ public class CSVSearch {
   public void search() {
     List<List<String>> file = this.data;
     for (int i = 0; i < file.size(); i++) {
-      if (file.get(i).contains(this.searchValue)) { // no need to implement equals because don't need to iterate
+      if (file.get(i)
+          .contains(
+              this.searchValue)) { // no need to implement equals because don't need to iterate
         // through each row
         this.result.add(file.get(i));
       }
@@ -49,7 +48,7 @@ public class CSVSearch {
   }
 
   /**
-   * Method to search by index, and specifying whether the CSV has headers.
+   * Method to search by index.
    *
    * @param columnIndex: the column index to search under.
    */
@@ -60,15 +59,13 @@ public class CSVSearch {
     }
     for (int i = 0; i < file.size(); i++) {
       if (file.get(i).get(columnIndex).equals(this.searchValue)) {
-          this.result.add(file.get(i));
-        }
+        this.result.add(file.get(i));
       }
     }
-
+  }
 
   /**
-   * Method to search by name, this always assumes headers are present because there should be no
-   * case where you can say the name of a column, without having columns...
+   * Method to search by name.
    *
    * @param columnName: name of Column that the searchValue is under.
    */
@@ -99,12 +96,5 @@ public class CSVSearch {
     return this.result;
   }
 
-  /**
-   * Method for testing edge case of whether the value exists in the CSV.
-   *
-   * @return: Boolean representing the existence of SearchValue in CSV.
-   */
-  public Boolean getMatched() {
-    return this.matched;
-  }
+
 }
