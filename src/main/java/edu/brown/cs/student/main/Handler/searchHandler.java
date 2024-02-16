@@ -69,6 +69,7 @@ public class searchHandler implements Route {
       this.searchHelper(searcher, columnName, columnIndex, responseMap);
 
     } catch (IndexOutOfBoundsException e) {
+      responseMap.put("Possible Column Names are:", this.state.getData().get(0));
       responseMap.put("result", "error");
       responseMap.put("error_type", "error_bad_request");
       responseMap.put("details", "Index/Column does not exist!");
