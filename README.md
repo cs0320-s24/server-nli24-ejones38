@@ -4,9 +4,29 @@ Ethan Jones (ejones38) Nick Li (nli24)
 Time Estimate: 28 hours 
 https://github.com/cs0320-s24/server-nli24-ejones38.git 
 # Design Choices
-utiilites, county, state, datasourec interface, mocked, eviction policy, acsdata,
-
-We chose to have a CensusAPIUtilities class 
+## State and County
+We chose to wrap the data contained for states (name, statewide) and county (county name, statecode, 
+and county code) in state and county wrapper classes. This allowed us to avoid having to contain a list 
+of strings to represent the data within the statemap and county maps. This also made the readability much easier, 
+as well as the getters for when we need to get state codes and county codes.
+## Eviction Policy
+We chose to use enums to contain the eviction policy. This allowed us for easy access to the different 
+cases, which we just different constructors of the cache builder. Because each eviction policy didn’t have 
+much difference (At least in terms of the code we need to write for them), they can be easily contained as enums.
+## Datasource interface
+We chose to have a datasource interface class that allows for different sources of data, 
+either the ACSDatasource, or mocked data (to allow for easy testing, and prevent sending too many requests). 
+Another important design choice, was the decision to contain a statemap within ACSDatasource, 
+but not within the cache. This allows for the class to contain the state map, 
+and prevents us from having to call multiple requests for the same state map (since we only need it once). 
+This also makes more sense since the class that contains the cache should likely hold all the data that 
+needs to be inputted into the final response map.
+## Overall Design
+CensusAPIUtilities sends the request and deserializes the response. ACSDataSource stores the deserialized data.
+Broadband handler processes the data and returns it to the user in the user output format. The handlers 
+for csv operate similarly, with loadcsv loading the file and parsing it, storing it in a shared state (CSVWrapper)
+Viewcsv essentially just returns the data from the shared state. Searchhandler includes the CSVSearch class 
+which performs the search, and the handler class configures the output and returns it to the user.
 
 
 # Errors/Bugs
@@ -38,10 +58,16 @@ testHandlersMock tests broadbandHandlers outputs when given a pre-set url contai
 This allows us to test broadband without its integration with CensusAPIUtilities.  Both the response message and 
 broadband data are tested. Additionally, we test to make sure broadband outputs an error if given a state or county 
 that does not exist.
+## Note on Mocked Data
+We started integration testing, but we didn’t know we were supposed to use mocked data until we had 
+finished the test suite. So, instead of deleting it, we just kept it and made a separate file for 
+integration testing based on mocked data. It seems that both files work, even though one of them is sending 
+repeated requests.
+
 # How to
 In order run our program you must first run the server either through intelliJ via the play button or run the program 
 using mvn package and ./run from a command terminal. Once the server is initialized navigate to a web browser and input 
-http://localhost:3232/(choice of chandler) with a handlers inputs being specified as handler?paramName=value&paramName..
+http://localhost:3232/(choice of handler) with a handlers inputs being specified as handler?paramName=value&paramName..
 this will allow you to use each of the handlers for their intended purposes. In order to run the tests either use the
 IntelliJ play button or run mvn site and target/site/jacoco/index.html in a web browser to view the tests. 
 
