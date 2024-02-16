@@ -95,6 +95,12 @@ public class searchHandler implements Route {
     }
   }
 
+  /**
+   *
+   * @param adapter
+   * @param responseMap
+   * @return
+   */
     private String validityHelper(JsonAdapter<Map<String, Object>> adapter, Map responseMap){
         this.state.setFileValidity(Boolean.FALSE);
         responseMap.put("result", "error");

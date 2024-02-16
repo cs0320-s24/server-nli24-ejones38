@@ -28,21 +28,21 @@ for csv operate similarly, with loadcsv loading the file and parsing it, storing
 Viewcsv essentially just returns the data from the shared state. Searchhandler includes the CSVSearch class 
 which performs the search, and the handler class configures the output and returns it to the user.
 
-
 # Errors/Bugs
 no current bugs 
 # Tests
+## Overview
 Our project has four testing suites: testCensusApiUtilities, testHandlers, testHandlersMock, and testCache. All methods
 first if a connection is properly established before testing specific handler functionality.
-
+## testCensusApiUtilities
 testCensusApiUtilities tests our API utilities class' ability to obtain and deserialize a JSON from the API and properly
 return its values. Each of the classes methods test CensusAPiUtilities ability to obtain state, county or broadband data
-
+## testCache
 testCache tests our cache's ability to store, retain and remove values based on a given size and evictionPolicy. The 
 first method tests cache's ability to store data up to the specified size. The second method tests to make sure that our
 cache adds and remove values based on the size eviction policy. The third method tests the same criteria for the 
 restriction eviction policy. 
-
+## testHandlers 
 testHandlers tests each of our handlers integrated output by first setting up a server and HTTPurlConnection. Our tests 
 make an api call using that connection allowing us to test each handler.
 For load, we test the handlers ability to successfully load a CSV file as well as responses to incorrect files or no 
@@ -53,7 +53,7 @@ test its responses when no value is provided, no CSV has been loaded or the inde
 For broadband, we test our handlers ability to successfully retrieve data given a proper state/county. Both the response
 message and broadband data are tested. Additionally, we test to make sure broadband outputs an error if given a state or
 county that does not exist.
-
+## testHandlersMock
 testHandlersMock tests broadbandHandlers outputs when given a pre-set url containing both the state and county info. 
 This allows us to test broadband without its integration with CensusAPIUtilities.  Both the response message and 
 broadband data are tested. Additionally, we test to make sure broadband outputs an error if given a state or county 

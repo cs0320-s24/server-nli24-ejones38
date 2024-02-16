@@ -121,16 +121,13 @@ public class ACSDataSource implements Datasource {
     return broadBandData;
   }
 
+  /**
+   * Gets and returns the cache and its contents
+   * Only used for testing purposes
+   * @return the cache of <String, Map>
+   */
   public Cache<String, Map> getCache() {
     return this.cache;
 
-    //    Cache<String, Map> newCache = CacheBuilder.newBuilder().build();
-    //
-    //    // Copy entries from the original cache to the new cache
-    //    for (Map.Entry<String, Map> entry : this.cache.asMap().entrySet()) {
-    //      newCache.put(entry.getKey(), entry.getValue());
-    //    }
-    //
-    //    return newCache;
   }
 }

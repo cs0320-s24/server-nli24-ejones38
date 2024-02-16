@@ -97,13 +97,7 @@ public class broadbandHandler implements Route {
         return adapter.toJson(responseMap);
       }
 
-      List<List<String>> broadBandData;
-      if (this.cache != null) {
-        broadBandData = this.cache.getBroadbandData(stateCode, countyCode);
-      } else {
-        broadBandData = CensusAPIUtilities.deserializeBroadband(stateCode, countyCode);
-      }
-
+      List<List<String>> broadBandData = this.getBroadBand(stateCode, countyCode);
       responseMap.put("data", broadBandData);
       responseMap.put("result", "success");
       return adapter.toJson(responseMap);
@@ -115,6 +109,12 @@ public class broadbandHandler implements Route {
     }
   }
 
+  /**
+   *
+   * @param stateCode
+   * @return
+   * @throws IOException
+   */
   private Map<String, County> getCountyMap(String stateCode) throws IOException{
     if (this.cache != null) {
       return this.cache.getCountyCache(stateCode);
@@ -123,6 +123,11 @@ public class broadbandHandler implements Route {
     }
   }
 
+  /**
+   *
+   * @return
+   * @throws IOException
+   */
   private Map<String, State> getStateMap() throws IOException {
     if (this.cache != null) {
       return this.cache.getStates();
@@ -131,16 +136,19 @@ public class broadbandHandler implements Route {
     }
   }
 
-//  private String checkStateCode(Map<String, State> stateMap, String state){
-//    if (stateMap.get(state) != null) {
-//      State state1 = stateMap.get(state);
-//      stateCode = state1.getCode();
-//    } else {
-//      responseMap.put("result", "error");
-//      responseMap.put("error_type", "error_bad_request");
-//      responseMap.put("details", "State does not exist");
-//      return adapter.toJson(responseMap);
-//    }
-
+  /**
+   *
+   * @param stateCode
+   * @param countyCode
+   * @return
+   * @throws IOException
+   */
+  private List<List<String>> getBroadBand(String stateCode, String countyCode) throws IOException {
+    if (this.cache != null) {
+      return this.cache.getBroadbandData(stateCode, countyCode);
+    } else {
+      return CensusAPIUtilities.deserializeBroadband(stateCode, countyCode);
+    }
+  }
   }
 
