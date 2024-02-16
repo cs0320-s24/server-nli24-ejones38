@@ -29,7 +29,12 @@ Viewcsv essentially just returns the data from the shared state. Searchhandler i
 which performs the search, and the handler class configures the output and returns it to the user.
 
 # Errors/Bugs
-no current bugs 
+As of 6:03 PM on Friday, Feb 16, we have not gotten the run function to work. On both of our computers, 
+we can run mvn clean and mvn package, but we get the error saying "ls: src/main/java/edu/brown/cs/*/*/
+server/Server.java: No such file or directory You need a Server.java" We have verified that we are calling
+this in the right place and have stored Server in the right place with the right name. We both had problems
+with run on the last project. We also looked through Ed, implemented the suggestions with getting the pom.xml
+file from the gearup, nothing worked. However, the project works fine with the green play button. 
 # Tests
 ## Overview
 Our project has four testing suites: testCensusApiUtilities, testHandlers, testHandlersMock, and testCache. All methods

@@ -7,7 +7,6 @@ import edu.brown.cs.student.main.Search.CSVSearch;
 import edu.brown.cs.student.main.Search.CSVWrapper;
 import java.lang.reflect.Type;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import spark.Request;
 import spark.Response;
@@ -81,16 +80,16 @@ public class searchHandler implements Route {
     return adapter.toJson(responseMap);
   }
 
-
   /**
    * Method checks the input params and uses the appropriate search function
+   *
    * @param searcher - the CSVSearcher searching the CSV file
    * @param columnName - columnName to be searched
    * @param columnIndex - columnIndex to be searched
    * @param responseMap - the map of responses to be populated
    */
-  private void searchHelper(CSVSearch searcher, String columnName,
-                                          String columnIndex, Map<String, Object> responseMap) {
+  private void searchHelper(
+      CSVSearch searcher, String columnName, String columnIndex, Map<String, Object> responseMap) {
     if (columnName != null) {
       responseMap.put("columnName", columnName);
       searcher.search(columnName);
@@ -105,15 +104,16 @@ public class searchHandler implements Route {
 
   /**
    * Method used when file has not been loaded. Outputs error response
+   *
    * @param adapter - the adapter that turns the map into a JSON file
    * @param responseMap - the map of outputs to be output
    * @return - the JSON file representing error output
    */
-    private String validityHelper(JsonAdapter<Map<String, Object>> adapter, Map responseMap){
-        this.state.setFileValidity(Boolean.FALSE);
-        responseMap.put("result", "error");
-        responseMap.put("error_type", "datasource");
-        responseMap.put("details", "No file loaded!");
-        return adapter.toJson(responseMap);
-    }
+  private String validityHelper(JsonAdapter<Map<String, Object>> adapter, Map responseMap) {
+    this.state.setFileValidity(Boolean.FALSE);
+    responseMap.put("result", "error");
+    responseMap.put("error_type", "datasource");
+    responseMap.put("details", "No file loaded!");
+    return adapter.toJson(responseMap);
   }
+}

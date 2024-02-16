@@ -122,12 +122,11 @@ public class ACSDataSource implements Datasource {
   }
 
   /**
-   * Gets and returns the cache and its contents
-   * Only used for testing purposes
+   * Gets and returns the cache and its contents Only used for testing purposes
+   *
    * @return the cache of <String, Map>
    */
   public Cache<String, Map> getCache() {
     return this.cache;
-
   }
 }

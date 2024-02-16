@@ -11,9 +11,7 @@ import edu.brown.cs.student.main.Handler.viewHandler;
 import edu.brown.cs.student.main.Search.CSVWrapper;
 import spark.Spark;
 
-/**
- * Contains the main() method which starts Spark and runs the various handlers (2).
- */
+/** Contains the main() method which starts Spark and runs the various handlers (2). */
 public class Server {
 
   /** the instance variable representing the shared csv values/data that multiple handlers use */

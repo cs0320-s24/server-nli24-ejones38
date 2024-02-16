@@ -68,5 +68,4 @@ public class loadHandler implements Route {
       return adapter.toJson(responseMap);
     }
   }
-
 }

@@ -111,20 +111,22 @@ public class broadbandHandler implements Route {
 
   /**
    * Method generates countyMap or gets from the cache based on if a cache is provided
+   *
    * @param stateCode - the code corresponding to a state
    * @return - the Map of string (counties) to county objects
    * @throws IOException - thrown if deserializeCountyCodes fails
    */
-  private Map<String, County> getCountyMap(String stateCode) throws IOException{
+  private Map<String, County> getCountyMap(String stateCode) throws IOException {
     if (this.cache != null) {
       return this.cache.getCountyCache(stateCode);
     } else {
-       return CensusAPIUtilities.deserializeCountyCodes(stateCode);
+      return CensusAPIUtilities.deserializeCountyCodes(stateCode);
     }
   }
 
   /**
    * Method generates stateMap or gets from the DataSource class based on if a cache is provided
+   *
    * @return - the Map of string (states) to state objects
    * @throws IOException - thrown if deserializeCountyCodes fails
    */
@@ -138,6 +140,7 @@ public class broadbandHandler implements Route {
 
   /**
    * Method generates countyMap or gets from the cache based on if a cache is provided
+   *
    * @param stateCode - the code corresponding to the searched state
    * @param countyCode - the code corresponding to the searched county
    * @return - the list<list<string>> of broadband data
@@ -150,5 +153,4 @@ public class broadbandHandler implements Route {
       return CensusAPIUtilities.deserializeBroadband(stateCode, countyCode);
     }
   }
-  }
-
+}

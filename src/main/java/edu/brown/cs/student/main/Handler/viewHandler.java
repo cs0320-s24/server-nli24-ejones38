@@ -55,11 +55,12 @@ public class viewHandler implements Route {
 
   /**
    * Method used when file has not been loaded. Outputs error response
+   *
    * @param adapter - the adapter that turns the map into a JSON file
    * @param responseMap - the map of outputs to be output
    * @return - the JSON file representing error output
    */
-  private String validityHelper(JsonAdapter<Map<String, Object>> adapter, Map responseMap){
+  private String validityHelper(JsonAdapter<Map<String, Object>> adapter, Map responseMap) {
     this.state.setFileValidity(Boolean.FALSE);
     responseMap.put("result", "error");
     responseMap.put("error_type", "datasource");
