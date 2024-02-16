@@ -85,7 +85,6 @@ public class broadbandHandler implements Route {
       }
 
       Map<String, County> countyMap = this.getCountyMap(stateCode);
-
       String fullCounty = county + ", " + state;
 
       if (countyMap.get(fullCounty) != null) {
