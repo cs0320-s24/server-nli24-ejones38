@@ -66,7 +66,6 @@ public class searchHandler implements Route {
     String columnIndex = request.queryParams("columnIndex");
 
     try {
-      //List<List<String>> responseData =
       this.searchHelper(searcher, columnName, columnIndex, responseMap);
 
     } catch (IndexOutOfBoundsException e) {
@@ -81,6 +80,14 @@ public class searchHandler implements Route {
     return adapter.toJson(responseMap);
   }
 
+
+  /**
+   * Method checks the input params and uses the appropriate search function
+   * @param searcher - the CSVSearcher searching the CSV file
+   * @param columnName - columnName to be searched
+   * @param columnIndex - columnIndex to be searched
+   * @param responseMap - the map of responses to be populated
+   */
   private void searchHelper(CSVSearch searcher, String columnName,
                                           String columnIndex, Map<String, Object> responseMap) {
     if (columnName != null) {
@@ -96,10 +103,10 @@ public class searchHandler implements Route {
   }
 
   /**
-   *
-   * @param adapter
-   * @param responseMap
-   * @return
+   * Method used when file has not been loaded. Outputs error response
+   * @param adapter - the adapter that turns the map into a JSON file
+   * @param responseMap - the map of outputs to be output
+   * @return - the JSON file representing error output
    */
     private String validityHelper(JsonAdapter<Map<String, Object>> adapter, Map responseMap){
         this.state.setFileValidity(Boolean.FALSE);
@@ -108,6 +115,4 @@ public class searchHandler implements Route {
         responseMap.put("details", "No file loaded!");
         return adapter.toJson(responseMap);
     }
-
-
   }

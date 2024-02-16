@@ -110,10 +110,10 @@ public class broadbandHandler implements Route {
   }
 
   /**
-   *
-   * @param stateCode
-   * @return
-   * @throws IOException
+   * Method generates countyMap or gets from the cache based on if a cache is provided
+   * @param stateCode - the code corresponding to a state
+   * @return - the Map of string (counties) to county objects
+   * @throws IOException - thrown if deserializeCountyCodes fails
    */
   private Map<String, County> getCountyMap(String stateCode) throws IOException{
     if (this.cache != null) {
@@ -124,9 +124,9 @@ public class broadbandHandler implements Route {
   }
 
   /**
-   *
-   * @return
-   * @throws IOException
+   * Method generates stateMap or gets from the DataSource class based on if a cache is provided
+   * @return - the Map of string (states) to state objects
+   * @throws IOException - thrown if deserializeCountyCodes fails
    */
   private Map<String, State> getStateMap() throws IOException {
     if (this.cache != null) {
@@ -137,11 +137,11 @@ public class broadbandHandler implements Route {
   }
 
   /**
-   *
-   * @param stateCode
-   * @param countyCode
-   * @return
-   * @throws IOException
+   * Method generates countyMap or gets from the cache based on if a cache is provided
+   * @param stateCode - the code corresponding to the searched state
+   * @param countyCode - the code corresponding to the searched county
+   * @return - the list<list<string>> of broadband data
+   * @throws IOException - thrown if deserializeCountyCodes fails
    */
   private List<List<String>> getBroadBand(String stateCode, String countyCode) throws IOException {
     if (this.cache != null) {

@@ -12,8 +12,7 @@ import edu.brown.cs.student.main.Search.CSVWrapper;
 import spark.Spark;
 
 /**
- * Top-level class for this demo. Contains the main() method which starts Spark and runs the various
- * handlers (2).
+ * Contains the main() method which starts Spark and runs the various handlers (2).
  */
 public class Server {
 
