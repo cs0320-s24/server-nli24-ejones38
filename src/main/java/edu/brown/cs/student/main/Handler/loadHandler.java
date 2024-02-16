@@ -45,7 +45,7 @@ public class loadHandler implements Route {
   @Override
   public Object handle(Request request, Response response) throws Exception {
     String filePath = request.queryParams("filepath");
-    // type http://localhost:3232/loadcsv?filepath=census/income_by_race.csv
+    // http://localhost:3232/loadcsv?filepath=census/income_by_race.csv
     Map<String, Object> responseMap = new HashMap<>();
     responseMap.put("filepath", filePath);
     Moshi moshi = new Moshi.Builder().build();

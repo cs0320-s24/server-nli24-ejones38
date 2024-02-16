@@ -71,7 +71,7 @@ public class broadbandHandler implements Route {
 
       Map<String, State> stateMap = this.getStateMap();
 
-      String stateCode = "-1"; // need to do exception catching
+      String stateCode = "-1";
       String countyCode = "-1";
 
       if (stateMap.get(state) != null) {

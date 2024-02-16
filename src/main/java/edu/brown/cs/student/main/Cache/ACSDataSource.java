@@ -30,7 +30,7 @@ public class ACSDataSource implements Datasource {
   private Map<String, State> stateMap;
 
   /**
-   * Constructor for the eviction policies that need a numerical input.
+   * Constructor for the ACSDataSource that contains the eviction policies.
    *
    * @param limit the numerical input for size and time
    * @param policy the eviction policy specified
